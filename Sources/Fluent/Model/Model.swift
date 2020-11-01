@@ -346,10 +346,11 @@ extension Model where Database: QuerySupporting {
     ///
     /// - parameters:
     ///     - conn: Something `DatabaseConnectable` to create the `QueryBuilder` on.
+    ///     - database: Database identifier for the database this should run on. If `nil`, the model's default database is used.
     ///     - withSoftDeleted: If `true`, soft-deleted models will be included in the results. Defaults to `false`.
     /// - returns: A new `QueryBuilder` for this model.
-    public static func query(on conn: DatabaseConnectable, withSoftDeleted: Bool = false) -> QueryBuilder<Self.Database, Self> {
-        return query(on: conn.databaseConnection(to: Self.defaultDatabase), withSoftDeleted: withSoftDeleted)
+    public static func query(on conn: DatabaseConnectable, to database: DatabaseIdentifier<Database>? = nil, withSoftDeleted: Bool = false) -> QueryBuilder<Self.Database, Self> {
+        return query(on: conn.databaseConnection(to: database ?? Self.defaultDatabase), withSoftDeleted: withSoftDeleted)
     }
 
     /// Attempts to find an instance of this model with the supplied identifier.
